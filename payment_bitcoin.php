@@ -3,12 +3,12 @@ session_start();
 include("handler/customersession.php");
 include("partials/head.php");
 
-if (!isset($_SESSION['bitcoin_payment'])) {
+if (!isset($_SESSION['bitcoin_order'])) {
     header("Location: cart.php");
     exit();
 }
 
-$payment = $_SESSION['bitcoin_payment'];
+$order = $_SESSION['bitcoin_order'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +47,26 @@ $payment = $_SESSION['bitcoin_payment'];
             background: #d4edda;
             color: #155724;
         }
+        .bitcoin-address {
+            word-break: break-all;
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .copy-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .copy-button:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body class="animsition">
@@ -71,32 +91,45 @@ $payment = $_SESSION['bitcoin_payment'];
             <h2 class="mtext-109 cl2 p-b-30">Bitcoin Payment</h2>
 
             <div class="payment-details">
-                <p>Please send exactly <strong><?php echo number_format($payment['amount_btc'], 8); ?> BTC</strong> to the following address:</p>
-                <div class="qr-code">
-                    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=bitcoin:<?php echo $payment['bitcoin_address']; ?>?amount=<?php echo $payment['amount_btc']; ?>" alt="Bitcoin QR Code">
+                <p>Please send exactly <strong><?php echo number_format($order['amount_btc'], 8); ?> BTC</strong> to:</p>
+                <div class="bitcoin-address">
+                    <?php echo $order['bitcoin_address']; ?>
+                    <button class="copy-button" onclick="copyAddress()">Copy Address</button>
                 </div>
-                <p class="address-text">
-                    <strong>Address:</strong><br>
-                    <span class="monospace"><?php echo $payment['bitcoin_address']; ?></span>
-                </p>
+                <div class="qr-code">
+                    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=bitcoin:<?php echo $order['bitcoin_address']; ?>?amount=<?php echo $order['amount_btc']; ?>" alt="Bitcoin QR Code">
+                </div>
             </div>
 
             <div id="payment-status" class="payment-status status-pending">
                 <h4>Payment Status: <span id="status-text">Pending</span></h4>
                 <p>Waiting for payment confirmation...</p>
+                <p class="small">Order ID: <?php echo $order['unique_id']; ?></p>
             </div>
 
-            <p class="help-text">
+            <div class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i>
                 The payment will be automatically confirmed once we receive it. Please do not close this page.
-            </p>
+            </div>
         </div>
     </div>
 
     <?php include('partials/footer.php'); ?>
 
     <script>
+        function copyAddress() {
+            const address = '<?php echo $order['bitcoin_address']; ?>';
+            navigator.clipboard.writeText(address).then(() => {
+                const button = document.querySelector('.copy-button');
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy Address';
+                }, 2000);
+            });
+        }
+
         function checkPaymentStatus() {
-            fetch('bitcoin_payment.php?check_status=1&payment_id=<?php echo $payment['payment_id']; ?>')
+            fetch('handler/bitcoinhandler.php?check_status=1&unique_id=<?php echo $order['unique_id']; ?>')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -107,12 +140,24 @@ $payment = $_SESSION['bitcoin_payment'];
                         if (status.status === 'completed') {
                             statusDiv.className = 'payment-status status-completed';
                             statusText.textContent = 'Completed';
-                            statusDiv.innerHTML = '<h4>Payment Status: Completed</h4><p>Thank you for your payment!</p>';
+                            statusDiv.innerHTML = `
+                                <h4>Payment Status: Completed</h4>
+                                <p>Thank you for your payment!</p>
+                                <p>Received: ${status.received_amount} BTC</p>
+                                <p class="small">Order ID: <?php echo $order['unique_id']; ?></p>
+                            `;
                             // Redirect to success page after 3 seconds
                             setTimeout(() => {
                                 window.location.href = 'order_success.php';
                             }, 3000);
                         } else {
+                            statusDiv.innerHTML = `
+                                <h4>Payment Status: <span id="status-text">Pending</span></h4>
+                                <p>Waiting for payment confirmation...</p>
+                                <p>Received: ${status.received_amount} BTC</p>
+                                <p>Expected: ${status.expected_amount} BTC</p>
+                                <p class="small">Order ID: <?php echo $order['unique_id']; ?></p>
+                            `;
                             // Continue checking if payment is still pending
                             setTimeout(checkPaymentStatus, 30000); // Check every 30 seconds
                         }
