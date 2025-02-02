@@ -38,8 +38,18 @@ include ("partials/head.php");
                                                 </div>
 
                                                 <div class="bor8 m-b-30">
-                                                        <img id="captcha" src="/securimage-master/securimage_show.php" alt="CAPTCHA Image" />
-                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha" maxlength="6">
+                                                        <div class="captcha-container" style="text-align: center; margin-bottom: 10px;">
+                                                            <img id="captcha" src="securimage-master/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px;" />
+                                                            <div class="captcha-buttons" style="margin-top: 5px;">
+                                                                <a href="#" onclick="document.getElementById('captcha').src = 'securimage-master/securimage_show.php?' + Math.random(); return false" style="margin-right: 10px;">
+                                                                    <img src="securimage-master/images/refresh.png" alt="Refresh Image" onclick="this.blur()" style="vertical-align: middle;" />
+                                                                </a>
+                                                                <a href="securimage-master/securimage_play.php">
+                                                                    <img src="securimage-master/images/audio_icon.png" alt="Play Audio" style="vertical-align: middle;" />
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha Code" maxlength="6">
                                                 </div>
 
                                                 <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer" name="login">
@@ -71,8 +81,18 @@ include ("partials/head.php");
                                                 </div>
 
                                                 <div class="bor8 m-b-30">
-                                                        <img id="captcha2" src="/securimage-master/securimage_show.php" alt="CAPTCHA Image" />
-                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha" maxlength="6">
+                                                        <div class="captcha-container" style="text-align: center; margin-bottom: 10px;">
+                                                            <img id="captcha2" src="securimage-master/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px;" />
+                                                            <div class="captcha-buttons" style="margin-top: 5px;">
+                                                                <a href="#" onclick="document.getElementById('captcha2').src = 'securimage-master/securimage_show.php?' + Math.random(); return false" style="margin-right: 10px;">
+                                                                    <img src="securimage-master/images/refresh.png" alt="Refresh Image" onclick="this.blur()" style="vertical-align: middle;" />
+                                                                </a>
+                                                                <a href="securimage-master/securimage_play.php">
+                                                                    <img src="securimage-master/images/audio_icon.png" alt="Play Audio" style="vertical-align: middle;" />
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha Code" maxlength="6">
                                                 </div>
 
                                                 <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer" name="signup">
