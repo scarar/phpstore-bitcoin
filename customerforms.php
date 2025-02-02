@@ -39,17 +39,24 @@ include ("partials/head.php");
 
                                                 <div class="bor8 m-b-30">
                                                         <div class="captcha-container" style="text-align: center; margin-bottom: 10px;">
-                                                            <img id="captcha" src="securimage-master/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px;" />
+                                                            <img id="captcha" src="securimage-master/securimage_show.php?<?php echo time(); ?>" 
+                                                                 alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px; max-width: 100%; height: auto;" />
                                                             <div class="captcha-buttons" style="margin-top: 5px;">
-                                                                <a href="#" onclick="document.getElementById('captcha').src = 'securimage-master/securimage_show.php?' + Math.random(); return false" style="margin-right: 10px;">
-                                                                    <img src="securimage-master/images/refresh.png" alt="Refresh Image" onclick="this.blur()" style="vertical-align: middle;" />
-                                                                </a>
-                                                                <a href="securimage-master/securimage_play.php">
-                                                                    <img src="securimage-master/images/audio_icon.png" alt="Play Audio" style="vertical-align: middle;" />
-                                                                </a>
+                                                                <button type="button" class="btn btn-link" 
+                                                                        onclick="document.getElementById('captcha').src = 'securimage-master/securimage_show.php?' + Math.random();">
+                                                                    <i class="fa fa-refresh"></i> Refresh
+                                                                </button>
+                                                                <button type="button" class="btn btn-link" 
+                                                                        onclick="window.location.href='securimage-master/securimage_play.php';">
+                                                                    <i class="fa fa-volume-up"></i> Audio
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha Code" maxlength="6">
+                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" 
+                                                               name="captcha_code" placeholder="Enter Captcha Code" maxlength="6" required>
+                                                        <small class="form-text text-muted" style="text-align: center;">
+                                                            Enter the code shown in the image above
+                                                        </small>
                                                 </div>
 
                                                 <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer" name="login">
@@ -63,6 +70,14 @@ include ("partials/head.php");
                                                 <h4 class="mtext-105 cl2 txt-center p-b-30">
                                                         Register
                                                 </h4>
+                                                <?php if (isset($_SESSION['register_error'])): ?>
+                                                <div class="alert alert-danger">
+                                                    <?php 
+                                                        echo htmlspecialchars($_SESSION['register_error']);
+                                                        unset($_SESSION['register_error']);
+                                                    ?>
+                                                </div>
+                                                <?php endif; ?>
 
                                                 <div class="bor8 m-b-20 how-pos4-parent">
                                                         <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email" placeholder="Your Email Address">
@@ -82,17 +97,24 @@ include ("partials/head.php");
 
                                                 <div class="bor8 m-b-30">
                                                         <div class="captcha-container" style="text-align: center; margin-bottom: 10px;">
-                                                            <img id="captcha2" src="securimage-master/securimage_show.php" alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px;" />
+                                                            <img id="captcha2" src="securimage-master/securimage_show.php?<?php echo time(); ?>" 
+                                                                 alt="CAPTCHA Image" style="border: 1px solid #ccc; margin-bottom: 10px; max-width: 100%; height: auto;" />
                                                             <div class="captcha-buttons" style="margin-top: 5px;">
-                                                                <a href="#" onclick="document.getElementById('captcha2').src = 'securimage-master/securimage_show.php?' + Math.random(); return false" style="margin-right: 10px;">
-                                                                    <img src="securimage-master/images/refresh.png" alt="Refresh Image" onclick="this.blur()" style="vertical-align: middle;" />
-                                                                </a>
-                                                                <a href="securimage-master/securimage_play.php">
-                                                                    <img src="securimage-master/images/audio_icon.png" alt="Play Audio" style="vertical-align: middle;" />
-                                                                </a>
+                                                                <button type="button" class="btn btn-link" 
+                                                                        onclick="document.getElementById('captcha2').src = 'securimage-master/securimage_show.php?' + Math.random();">
+                                                                    <i class="fa fa-refresh"></i> Refresh
+                                                                </button>
+                                                                <button type="button" class="btn btn-link" 
+                                                                        onclick="window.location.href='securimage-master/securimage_play.php';">
+                                                                    <i class="fa fa-volume-up"></i> Audio
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="captcha_code" placeholder="Enter Captcha Code" maxlength="6">
+                                                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" 
+                                                               name="captcha_code" placeholder="Enter Captcha Code" maxlength="6" required>
+                                                        <small class="form-text text-muted" style="text-align: center;">
+                                                            Enter the code shown in the image above
+                                                        </small>
                                                 </div>
 
                                                 <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer" name="signup">
