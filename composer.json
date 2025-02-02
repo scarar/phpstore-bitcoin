@@ -1,13 +1,20 @@
 {
     "name": "openhands/phpstore-bitcoin",
-    "description": "Bitcoin Core RPC integration for PHP Store",
+    "description": "PHP Store with Bitcoin Core RPC integration",
     "require": {
         "php": ">=7.4",
-        "denpa/php-bitcoinrpc": "^2.1"
+        "denpa/php-bitcoinrpc": "^2.1",
+        "ext-pdo": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
-            "PhpStore\\Bitcoin\\": "src/"
-        }
+            "PhpStore\\Bitcoin\\": "src/",
+            "PhpStore\\": "classes/"
+        },
+        "files": [
+            "functions.php",
+            "config.php"
+        ]
     }
 }

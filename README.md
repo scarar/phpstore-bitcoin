@@ -1,10 +1,23 @@
-# PHP Store Bitcoin Integration
+# PHP Store with Bitcoin Integration
 
-This repository contains the Bitcoin Core RPC integration for the PHP Store application. It provides a simple way to handle Bitcoin payments in your PHP Store installation.
+This repository is a complete e-commerce solution with Bitcoin payment integration. It combines the original PHP Store functionality with Bitcoin Core RPC payment processing.
+
+## Features
+
+- Complete e-commerce platform
+- Product catalog and shopping cart
+- User registration and authentication
+- Multiple payment methods:
+  - Cash on delivery
+  - PayPal
+  - Bitcoin (using Bitcoin Core RPC)
+- Real-time Bitcoin payment tracking
+- Order management system
 
 ## Requirements
 
 - PHP 7.4 or higher
+- MySQL/MariaDB
 - Bitcoin Core node running with RPC enabled
 - Composer for dependency management
 
@@ -16,7 +29,24 @@ This repository contains the Bitcoin Core RPC integration for the PHP Store appl
 composer install
 ```
 
-3. Copy the config/bitcoin.php file and update it with your Bitcoin Core RPC credentials:
+3. Import the SQL files:
+```bash
+mysql -u your_user -p your_database < sql\ file/phpstore.sql
+mysql -u your_user -p your_database < sql\ file/bitcoin_payments.sql
+```
+
+4. Configure your database connection in `config/database.php`:
+```php
+return [
+    'host' => 'localhost',
+    'dbname' => 'your_database',
+    'username' => 'your_username',
+    'password' => 'your_password',
+    'charset' => 'utf8mb4'
+];
+```
+
+5. Configure Bitcoin Core RPC in `config/bitcoin.php`:
 ```php
 return [
     'scheme' => 'http',
@@ -30,42 +60,57 @@ return [
 
 ## Usage
 
-The `BitcoinPaymentManager` class provides several methods for handling Bitcoin payments:
+1. Start your web server and point it to the project directory
+2. Access the website through your browser
+3. Register an account or log in
+4. Browse products and add them to cart
+5. During checkout, select Bitcoin as payment method
+6. Follow the payment instructions on screen
 
-```php
-use PhpStore\Bitcoin\BitcoinPaymentManager;
+## Bitcoin Payment Process
 
-// Initialize with configuration
-$config = require 'config/bitcoin.php';
-$bitcoinManager = new BitcoinPaymentManager($config);
+1. Customer selects Bitcoin payment method
+2. System generates a unique Bitcoin address
+3. Customer sends the exact amount to the address
+4. System monitors the address for incoming transactions
+5. Order is marked as complete when payment is confirmed
 
-// Generate new address for payment
-$address = $bitcoinManager->generateNewAddress();
+## Security Features
 
-// Check received amount
-$amount = $bitcoinManager->getReceivedByAddress($address);
+- Secure password hashing
+- Session management
+- SQL injection protection
+- XSS prevention
+- CSRF protection
+- Secure Bitcoin payment handling:
+  - Unique addresses for each transaction
+  - Confirmation requirement
+  - Amount validation
+  - Double-spend protection
 
-// Validate payment
-$isValid = $bitcoinManager->validatePayment($address, 0.001); // 0.001 BTC
+## Directory Structure
 
-// Get transactions
-$transactions = $bitcoinManager->getTransactionsByAddress($address);
-```
+- `/classes` - Core PHP classes
+- `/config` - Configuration files
+- `/handler` - Request handlers
+- `/partials` - Reusable page components
+- `/sql file` - Database schema
+- `/src` - Bitcoin integration classes
+- `/vendor` - Composer dependencies
 
-See the `examples/payment.php` file for more detailed usage examples.
+## Contributing
 
-## Integration with PHP Store
-
-To integrate this with your PHP Store installation:
-
-1. Add this package as a dependency
-2. Configure your Bitcoin Core RPC settings
-3. Use the BitcoinPaymentManager class to handle payments in your checkout process
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## Security Considerations
 
-- Always validate payment amounts server-side
-- Use HTTPS for all API communications
-- Keep your Bitcoin Core RPC credentials secure
-- Monitor for double-spend attempts
-- Wait for sufficient confirmations before finalizing orders
+- Always use HTTPS in production
+- Keep Bitcoin Core RPC credentials secure
+- Regularly update dependencies
+- Monitor for suspicious activities
+- Maintain secure backups
+- Use strong server-side validation
