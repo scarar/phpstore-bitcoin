@@ -136,9 +136,6 @@ include ("partials/head.php");
 
 
         <!-- Footer -->
-        <?php
-        include('partials/footer.php');
-        ?>
-
+        <?php include('partials/auth_footer.php'); ?>
 </body>
 </html>
