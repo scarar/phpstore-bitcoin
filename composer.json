@@ -1,0 +1,13 @@
+{
+    "name": "openhands/phpstore-bitcoin",
+    "description": "Bitcoin Core RPC integration for PHP Store",
+    "require": {
+        "php": ">=7.4",
+        "denpa/php-bitcoinrpc": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpStore\\Bitcoin\\": "src/"
+        }
+    }
+}
