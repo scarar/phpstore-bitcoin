@@ -1,11 +1,11 @@
 <?php
+require_once __DIR__ . '/../includes/Database.php';
 
-$host="localhost";
-$user="root";
-$password="";
-$dbname="phpstore";
+// Get database connection
+$connect = Database::getConnection();
 
-$connect=mysqli_connect($host,$user,$password,$dbname);
-
-
-?>
+// For backward compatibility
+$host = "localhost";
+$user = "root";
+$password = "";
+$dbname = "phpstore";
