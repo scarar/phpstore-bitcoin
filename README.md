@@ -6,12 +6,13 @@ This repository is a complete e-commerce solution with Bitcoin payment integrati
 
 - Complete e-commerce platform
 - Product catalog and shopping cart
-- User registration and authentication
+- User registration and authentication with CAPTCHA
 - Multiple payment methods:
   - Cash on delivery
   - PayPal
   - Bitcoin (using Bitcoin Core RPC)
 - Real-time Bitcoin payment tracking
+- Live BTC/USD price updates
 - Order management system
 
 ## Requirements
@@ -24,79 +25,171 @@ This repository is a complete e-commerce solution with Bitcoin payment integrati
 ## Installation
 
 1. Clone this repository
-2. Install dependencies:
+
+2. Install Composer dependencies:
 ```bash
-composer install
+composer require denpa/php-bitcoinrpc
+composer require guzzlehttp/guzzle
 ```
 
-3. Import the SQL files:
-```bash
-mysql -u your_user -p your_database < sql\ file/phpstore.sql
-mysql -u your_user -p your_database < sql\ file/bitcoin_payments.sql
+Required dependencies in composer.json:
+```json
+{
+    "require": {
+        "php": ">=7.4",
+        "denpa/php-bitcoinrpc": "^2.1",
+        "guzzlehttp/guzzle": "^7.0"
+    }
+}
 ```
 
-4. Configure your database connection in `config/database.php`:
+3. Import the SQL file:
+```bash
+mysql -u your_user -p your_database < sql\ file/phpstore_bitcoin.sql
+```
+
+## Configuration Files
+
+Several files need to be configured with your credentials:
+
+### 1. Database Configuration (Two Files)
+
+#### a. Main Database Config
+File: `config/database.php`
 ```php
 return [
-    'host' => 'localhost',
-    'dbname' => 'your_database',
-    'username' => 'your_username',
-    'password' => 'your_password',
+    'host' => 'localhost',      // Your database host
+    'dbname' => 'phpstore',     // Your database name
+    'username' => 'root',       // Your database username
+    'password' => '',           // Your database password
     'charset' => 'utf8mb4'
 ];
 ```
 
-5. Configure Bitcoin Core RPC in `config/bitcoin.php`:
+#### b. Legacy Database Connection
+File: `partials/connect.php`
+```php
+<?php
+$host = "localhost";    // Your database host
+$user = "root";        // Your database username
+$password = "";        // Your database password
+$dbname = "phpstore";  // Your database name
+
+$connect = mysqli_connect($host, $user, $password, $dbname);
+?>
+```
+
+### 2. Bitcoin Core RPC Configuration
+File: `config/bitcoin.php`
 ```php
 return [
     'scheme' => 'http',
-    'host' => '127.0.0.1',
-    'port' => 8332,
-    'user' => 'your-rpc-username',
-    'password' => 'your-rpc-password',
+    'host' => '127.0.0.1',              // Your Bitcoin Core RPC host
+    'port' => 8332,                     // Your Bitcoin Core RPC port
+    'user' => 'your-rpc-username',      // Your Bitcoin Core RPC username
+    'password' => 'your-rpc-password',  // Your Bitcoin Core RPC password
     'confirmations_required' => 3
 ];
 ```
 
-## Usage
+### 3. Bitcoin Price API Configuration
+File: `js/bitcoin-price.js`
+```javascript
+// Configure API endpoints and update intervals
+const CONFIG = {
+    UPDATE_INTERVAL: 60000,  // Price update interval in milliseconds
+    CACHE_DURATION: 3600000, // Cache duration in milliseconds
+    APIS: {
+        BINANCE_US: 'https://api.binance.us/api/v3/ticker/price?symbol=BTCUSDT',
+        BINANCE_GLOBAL: 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT',
+        BLOCKCHAIN_INFO: 'https://blockchain.info/ticker'
+    }
+};
+```
 
-1. Start your web server and point it to the project directory
-2. Access the website through your browser
-3. Register an account or log in
-4. Browse products and add them to cart
-5. During checkout, select Bitcoin as payment method
-6. Follow the payment instructions on screen
+### 4. PayPal Configuration (if using PayPal)
+File: `config/paypal.php`
+```php
+return [
+    'client_id' => 'your-paypal-client-id',
+    'client_secret' => 'your-paypal-client-secret',
+    'mode' => 'sandbox' // or 'live' for production
+];
+```
 
-## Bitcoin Payment Process
+### 5. Admin Account
+Default admin credentials in SQL file:
+- Username: admin
+- Email: admin@phpstore.com
+- Password: admin123
 
-1. Customer selects Bitcoin payment method
-2. System generates a unique Bitcoin address
-3. Customer sends the exact amount to the address
-4. System monitors the address for incoming transactions
-5. Order is marked as complete when payment is confirmed
-
-## Security Features
-
-- Secure password hashing
-- Session management
-- SQL injection protection
-- XSS prevention
-- CSRF protection
-- Secure Bitcoin payment handling:
-  - Unique addresses for each transaction
-  - Confirmation requirement
-  - Amount validation
-  - Double-spend protection
+**IMPORTANT:** Change these credentials after first login!
 
 ## Directory Structure
 
+- `/admin` - Admin panel and management interface
 - `/classes` - Core PHP classes
 - `/config` - Configuration files
+- `/css` - Stylesheets
+  - `bitcoin.css` - Bitcoin-specific styles
+  - `main.css` - Main application styles
 - `/handler` - Request handlers
+- `/includes` - PHP includes and helpers
+- `/js` - JavaScript files
+  - `bitcoin-price.js` - Bitcoin price updates
+  - `main.js` - Main application scripts
 - `/partials` - Reusable page components
+  - `connect.php` - Legacy database connection
+  - `header.php` - Site header with Bitcoin price
+  - `footer.php` - Site footer
+- `/securimage-master` - CAPTCHA implementation
 - `/sql file` - Database schema
 - `/src` - Bitcoin integration classes
 - `/vendor` - Composer dependencies
+
+## Security Considerations
+
+1. File Permissions:
+   - Set 644 for files
+   - Set 755 for directories
+   - Protect config files
+
+2. Configuration Security:
+   - Move config files outside web root
+   - Use strong passwords
+   - Change default credentials
+   - Use different database users for admin/customer access
+
+3. Bitcoin Security:
+   - Use SSL/TLS for RPC
+   - Limit RPC access
+   - Monitor transactions
+   - Set appropriate confirmations
+
+4. Database Security:
+   - Use prepared statements
+   - Limit database user privileges
+   - Regular backups
+   - Secure credentials
+
+## Troubleshooting
+
+1. Bitcoin Price Not Updating:
+   - Check API endpoints in bitcoin-price.js
+   - Verify network connectivity
+   - Check browser console for errors
+
+2. Bitcoin Payments Not Processing:
+   - Verify Bitcoin Core is running
+   - Check RPC credentials
+   - Verify network connectivity
+   - Check PHP error logs
+
+3. Database Connection Issues:
+   - Verify MySQL is running
+   - Check credentials in both database.php and connect.php
+   - Verify database exists
+   - Check PHP error logs
 
 ## Contributing
 
@@ -106,11 +199,6 @@ return [
 4. Push to the branch
 5. Create a Pull Request
 
-## Security Considerations
+## License
 
-- Always use HTTPS in production
-- Keep Bitcoin Core RPC credentials secure
-- Regularly update dependencies
-- Monitor for suspicious activities
-- Maintain secure backups
-- Use strong server-side validation
+This project is licensed under the MIT License - see the LICENSE file for details.
