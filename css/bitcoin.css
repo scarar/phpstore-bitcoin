@@ -11,10 +11,12 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    min-width: 150px;
 }
 
 #btc-usd-rate .fab.fa-bitcoin {
     color: #f7931a;
+    font-size: 1.2em;
 }
 
 .price-container {
@@ -28,13 +30,48 @@
 }
 
 /* Loading animation */
-.btc-price.loading::after {
-    content: "...";
-    animation: loading 1.5s infinite;
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
 }
 
-@keyframes loading {
-    0% { content: "."; }
-    33% { content: ".."; }
-    66% { content: "..."; }
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Bitcoin price styles */
+.btc-price-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(247, 147, 26, 0.05);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btc-price-display:hover {
+    background: rgba(247, 147, 26, 0.1);
+}
+
+.btc-price-value {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 500;
+}
+
+.btc-price-currency {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Error state */
+.btc-price-error {
+    color: #dc3545;
+    font-size: 0.9em;
+    padding: 4px 8px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 4px;
 }

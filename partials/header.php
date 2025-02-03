@@ -14,8 +14,10 @@ include("partials/connect.php");
 
                                         <div class="right-top-bar flex-w h-full">
                                                 <a href="#" class="flex-c-m trans-04 p-lr-25">
-                                                    <i class="fab fa-bitcoin"></i>
-                                                    <span id="btc-usd-rate" class="ml-2">Loading BTC price...</span>
+                                                    <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
+                                                    <span id="btc-usd-rate" class="ml-2">
+                                                        <span class="loading-dots">Loading BTC price</span>
+                                                    </span>
                                                 </a>
                                         
                                                 <?php
