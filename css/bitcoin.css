@@ -7,16 +7,37 @@
     margin-left: 5px;
 }
 
+.btc-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: rgba(247, 147, 26, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btc-price-container:hover {
+    background: rgba(247, 147, 26, 0.2);
+}
+
+.btc-price-container .fab.fa-bitcoin {
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+
 #btc-usd-rate {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     min-width: 150px;
+    color: #333;
+    font-weight: 500;
 }
 
-#btc-usd-rate .fab.fa-bitcoin {
-    color: #f7931a;
-    font-size: 1.2em;
+.loading-dots {
+    opacity: 0.7;
+    font-style: italic;
 }
 
 .price-container {

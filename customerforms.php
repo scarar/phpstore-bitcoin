@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+session_start();
 include ("partials/head.php");
 ?>
 <body class="animsition">

@@ -9,17 +9,15 @@ include("partials/connect.php");
                         <div class="top-bar">
                                 <div class="content-topbar flex-sb-m h-full container">
                                         <div class="left-top-bar">
-                                                We Class You Up.....
-                                        </div>
-
-                                        <div class="right-top-bar flex-w h-full">
-                                                <a href="#" class="flex-c-m trans-04 p-lr-25">
+                                                <div class="btc-price-container">
                                                     <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
                                                     <span id="btc-usd-rate" class="ml-2">
                                                         <span class="loading-dots">Loading BTC price</span>
                                                     </span>
-                                                </a>
-                                        
+                                                </div>
+                                        </div>
+
+                                        <div class="right-top-bar flex-w h-full">
                                                 <?php
                                                 if (!empty($_SESSION['email'])) {?>
 
